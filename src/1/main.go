@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"os"
 )
 
@@ -15,4 +16,8 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
+}
+
+func dirTree(out io.Writer, path string, printFiles bool) error {
+	return nil
 }
