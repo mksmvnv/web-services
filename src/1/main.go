@@ -1,9 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"os"
 )
+
+type Item struct {
+	Name string
+}
 
 func main() {
 	out := os.Stdout
@@ -19,5 +24,20 @@ func main() {
 }
 
 func dirTree(out io.Writer, path string, printFiles bool) error {
+	var buf []Item
+	items, err := os.ReadDir(path)
+	if err != nil {
+		return err
+	}
+	for _, item := range items {
+		if printFiles {
+			buf = append(buf, Item{item.Name()})
+		} else {
+			if item.IsDir() {
+				buf = append(buf, Item{item.Name()})
+			}
+		}
+	}
+	fmt.Println(buf)
 	return nil
 }
