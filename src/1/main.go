@@ -21,28 +21,36 @@ func main() {
 }
 
 func dirTree(out io.Writer, path string, printFiles bool) error {
-	items, err := os.ReadDir(path)
+	// Read directory
+	fileSystemObjects, err := os.ReadDir(path)
 	if err != nil {
 		return err
 	}
-	for _, item := range items {
+	for _, fileSystemObject := range fileSystemObjects {
+		// If we use -f argument
 		if printFiles {
-			if item.IsDir() {
-				fmt.Fprintln(out, item.Name())
-				subDir := filepath.Join(path+"/", item.Name())
+			if fileSystemObject.IsDir() {
+				fmt.Fprintf(out, "%s\n", fileSystemObject.Name())
+				subDir := filepath.Join(path, fileSystemObject.Name())
 				dirTree(out, subDir, printFiles)
 			} else {
-				fileSize, err := os.Stat(item.Name())
+				const emptySize int64 = 0
+				fileSize, err := os.Stat(filepath.Join(path, fileSystemObject.Name()))
 				if err != nil {
 					return err
 				}
-				fmt.Fprintf(out, "%s (%db)\n", item.Name(), fileSize.Size())
+				// If file is empty
+				if fileSize.Size() == emptySize {
+					fmt.Fprintf(out, "%s (empty)\n", fileSystemObject.Name())
+					continue
+				}
+				fmt.Fprintf(out, "%s (%db)\n", fileSystemObject.Name(), fileSize.Size())
 			}
-
 		}
-		if !printFiles && item.IsDir() {
-			fmt.Fprintln(out, item.Name())
-			subDir := filepath.Join(path+"/", item.Name())
+		// If we don't use -f argument
+		if !printFiles && fileSystemObject.IsDir() {
+			fmt.Fprintf(out, "%s\n", fileSystemObject.Name())
+			subDir := filepath.Join(path, fileSystemObject.Name())
 			dirTree(out, subDir, printFiles)
 		}
 	}
