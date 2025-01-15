@@ -44,7 +44,11 @@ func TestTreeFull(t *testing.T) {
 	}
 	result := out.String()
 	if result != testFullResult {
-		t.Errorf("test for OK Failed - results not match\nGot:\n%v\nExpected:\n%v", result, testFullResult)
+		t.Errorf(
+			"test for OK Failed - results not match\nGot:\n%v\nExpected:\n%v",
+			result,
+			testFullResult,
+		)
 	}
 }
 
@@ -70,6 +74,10 @@ func TestTreeDir(t *testing.T) {
 	}
 	result := out.String()
 	if result != testDirResult {
-		t.Errorf("test for OK Failed - results not match\nGot:\n%v\nExpected:\n%v", result, testDirResult)
+		t.Errorf(
+			"test for OK Failed - results not match\nGot:\n%v\nExpected:\n%v",
+			result,
+			testDirResult,
+		)
 	}
 }
