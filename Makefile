@@ -2,12 +2,13 @@
 
 .DEFAULT_GOAL := all
 
-SRC := $(shell find . -name "*.go" -not -path "./vendor/*")
+SRC := $(shell pwd)/src
+GCI := $(shell pwd)/.golangci.yml
 
 all: lint format
 
 lint:
-	golangci-lint run --config .golangci.yml
+	find src -name "go.mod" -execdir golangci-lint run --config $(GCI) ./... \;
 
 format:
 	gofmt -w $(SRC)
